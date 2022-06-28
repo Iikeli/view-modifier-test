@@ -11,7 +11,7 @@ import SwiftUI
 struct view_modifier_testApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: TestViewModel.init(publishedValue: 0))
         }
     }
 }
