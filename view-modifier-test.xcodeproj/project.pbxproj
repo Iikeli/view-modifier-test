@@ -10,6 +10,7 @@
 		3402D214286B468500C19E2B /* view_modifier_testApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3402D204286B468400C19E2B /* view_modifier_testApp.swift */; };
 		3402D216286B468500C19E2B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3402D205286B468400C19E2B /* ContentView.swift */; };
 		3402D218286B468500C19E2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3402D206286B468500C19E2B /* Assets.xcassets */; };
+		3479352F2886CCA70020AEFA /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 3479352E2886CCA70020AEFA /* Introspect */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3479352F2886CCA70020AEFA /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +84,9 @@
 			dependencies = (
 			);
 			name = "view-modifier-test (iOS)";
+			packageProductDependencies = (
+				3479352E2886CCA70020AEFA /* Introspect */,
+			);
 			productName = "view-modifier-test (iOS)";
 			productReference = 3402D20B286B468500C19E2B /* view-modifier-test.app */;
 			productType = "com.apple.product-type.application";
@@ -110,6 +115,9 @@
 				Base,
 			);
 			mainGroup = 3402D1FE286B468400C19E2B;
+			packageReferences = (
+				3479352D2886CCA70020AEFA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
 			productRefGroup = 3402D20C286B468500C19E2B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -335,6 +343,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3479352D2886CCA70020AEFA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3479352E2886CCA70020AEFA /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3479352D2886CCA70020AEFA /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3402D1FF286B468400C19E2B /* Project object */;
 }

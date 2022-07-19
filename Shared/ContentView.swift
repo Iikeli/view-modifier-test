@@ -1,7 +1,9 @@
 import SwiftUI
+import Introspect
 
 struct ContentView: View {
     @ObservedObject var viewModel: TestViewModel
+    @StateObject var hostingViewController: HostingViewController = .init(rootViewController: nil, style: .default)
 
     var body: some View {
         ZStack {
@@ -11,10 +13,11 @@ struct ContentView: View {
                     .onChange(of: viewModel.publishedValue) { newValue in
                         // Change status bar color
                         if viewModel.publishedValue % 2 == 0 {
-                            self.body.statusBarStyle(.lightContent)
+                            hostingViewController.style = .lightContent
                         } else {
-                            self.body.statusBarStyle(.darkContent)
+                            hostingViewController.style = .darkContent
                         }
+
                     }
                 Button("Increment") {
                     viewModel.publishedValue += 1
@@ -22,7 +25,12 @@ struct ContentView: View {
             }
         }
         .ignoresSafeArea()
-        .statusBarStyle(.lightContent)
+        .introspectViewController { viewController in
+            let window = viewController.view.window
+            guard let rootViewController = window?.rootViewController else { return }
+            hostingViewController.rootViewController = rootViewController
+            window?.rootViewController = hostingViewController
+        }
     }
 }
 
@@ -34,26 +42,16 @@ class TestViewModel: ObservableObject {
     }
 }
 
-extension View {
-    /// Overrides the default status bar style with the given `UIStatusBarStyle`.
-    ///
-    /// - Parameters:
-    ///   - style: The `UIStatusBarStyle` to be used.
-    func statusBarStyle(_ style: UIStatusBarStyle) -> some View {
-        return self.background(HostingWindowFinder(callback: { window in
-            guard let rootViewController = window?.rootViewController else { return }
-            let hostingController = HostingViewController(rootViewController: rootViewController, style: style)
-            window?.rootViewController = hostingController
-        }))
+class HostingViewController: UIViewController, ObservableObject {
+    var rootViewController: UIViewController?
+
+    var style: UIStatusBarStyle = .default {
+        didSet {
+            self.rootViewController?.setNeedsStatusBarAppearanceUpdate()
+        }
     }
 
-}
-
-fileprivate class HostingViewController: UIViewController {
-    private var rootViewController: UIViewController?
-    private var style: UIStatusBarStyle = .default
-
-    init(rootViewController: UIViewController, style: UIStatusBarStyle) {
+    init(rootViewController: UIViewController?, style: UIStatusBarStyle) {
         self.rootViewController = rootViewController
         self.style = style
         super.init(nibName: nil, bundle: nil)
@@ -77,21 +75,5 @@ fileprivate class HostingViewController: UIViewController {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setNeedsStatusBarAppearanceUpdate()
-    }
-}
-
-fileprivate struct HostingWindowFinder: UIViewRepresentable {
-    var callback: (UIWindow?) -> ()
-
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
-        DispatchQueue.main.async { [weak view] in
-            self.callback(view?.window)
-        }
-        return view
-    }
-
-    func updateUIView(_ uiView: UIView, context: Context) {
-        // ...
     }
 }
